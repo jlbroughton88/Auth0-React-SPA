@@ -9,40 +9,49 @@ export class Auth0Provider extends Component {
     state = {
         auth0Client: null,
         isLoading: true,
-        isAuthenticated: false
+        isAuthenticated: false,
+        user: null
     };
 
     config = {
         domain: process.env.REACT_APP_AUTH0_DOMAIN,
-        clientID: process.env.REACT_APP_CLIENT_ID,
-        redirect_uri: window.location.origin
-    }
+        client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+        redirect_uri: window.location.origin,
+    };
 
     componentDidMount() {
         this.initializeAuth0();
-    }
+    };
 
     // Initialize the auth0 library
     initializeAuth0 = async () => {
         const auth0Client = await createAuth0Client(this.config);
         const isAuthenticated = await auth0Client.isAuthenticated();
+        const user = isAuthenticated ? await auth0Client.getUser() : null;
 
-        this.setState({ auth0Client, isLoading: false, isAuthenticated });
-    }
+        this.setState({ auth0Client, isLoading: false, isAuthenticated, user });
+    };
 
     render() {
-        const { isLoading, isAuthenticated } = this.state;
+        const { auth0Client, isLoading, isAuthenticated, user } = this.state;
         const { children } = this.props;
 
+
+        console.log(auth0Client)
         const configObject = { 
             isLoading,
-            isAuthenticated
-         }
+            isAuthenticated,
+            user,
+            loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
+            getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
+            getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
+            logout: (...p) => auth0Client.logout(...p)
+         };
 
         return (
             <Auth0Context.Provider value={configObject}>
                 {children}
             </Auth0Context.Provider>
-        )
-    } 
-}
+        );
+    };
+};
