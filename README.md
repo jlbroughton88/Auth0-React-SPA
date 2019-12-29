@@ -1,6 +1,7 @@
 # Auth0-React-SPA
 
 This app is created by following along with a tutorial on Auth0.
+https://auth0.com/blog/authenticating-your-first-react-app/
 
 This application will be able to...
     -Use Auth0 to log in via email or social (Facebook,Twitter, Google and More)
@@ -161,3 +162,48 @@ Instantiating the Auth0 SPA SDK
             We have users logged in. We'll give them a way to logout now. We already have the functionality to log a user out thanks to the logout() method.
 
             We also have already passed it to our application through React Context. Within the configObject, we are going to add a couple of things.
+
+            Add the logout button to app.js
+
+            When using the logout method, we need to provide a place for Auth0 to return our users. We do that with the returnTo property. The flow for loggin gout is similar to logging in.
+
+                - Redirect users to Auth0.
+                - Auth0 sends the user back to our app.
+
+            This is where our applications URL (http://localhost:3002) in the Allowed Logout URLs comes into play.
+
+            We can now log in and log out of our app!
+
+            Renaming the Auth0 Context to useAuth0
+
+            Our Auth0 Context file is the main file we need to impliment our entire Auth0 SPA SDK strategy. 
+
+            We can tweak this one more time to make it a bit more readable. To make this change, we will update auth0-context.js.
+
+            We have now added useContext and then used it directly in this file. Now we dont have to useContext() in our other components.
+
+            Using our new useAuth0()
+        
+            We can now update App.js with the useAuth0().
+
+            Our code is that much nicer now and we have to write less in our React components.
+
+            WE have everything we need 5to work with authentication in our React applications. Lets take a look at three more common tasks that we need next: 
+
+                - Getting user information in other components
+                - Grabbing an auth token to use when calling APIs.
+                - Protecting specific React roiutes (ie /dashboard page)
+
+            
+            Getting User Info in React Components...
+
+            Lets add a <Header/> component and see how we can use 5the user info there. The technique is similar to what we did in App.js. Create a new folder in src/ and we
+            will name it components. Within the components folder, create a new file called Header.js.
+
+                Creating a header component...
+
+                We're going to drop a log of code here. The main things to note are that we are using useAuth() just like we did in App.js. We are also using Bulma classes for creating a navbar.
+                Create a CSS file to style the buttons too.
+
+            MUST HAVE REAL API KEY TO STAY LOGGED IN ON REFRESH
+            Email method works.
