@@ -4,7 +4,7 @@ import { Auth0Context } from "./contexts/auth0-context";
 
 function App() {
 
-  const auth0 = useContext(Auth0Context);
+  const { isLoading, user, loginWithRedirect } = useContext(Auth0Context);
 
 
   return (
@@ -12,10 +12,22 @@ function App() {
       <div className="hero is-info is-fullheight">
         <div className="hero-body">
           <div className="container has-text-centered">
-            <h1>Click Below!</h1>
-            <button onClick={auth0.loginWithRedirect} className="button is-danger">
-              Login
-            </button>
+            {!isLoading && !user && (
+              <>
+                <h1>Click Below!</h1>
+                <button onClick={loginWithRedirect} className="button is-danger">
+                  Login
+                </button>
+              </>
+            )}
+            {!isLoading && user && (
+              <>
+                <h1>You are logged in!</h1>
+                <p>Hello, {user.given_name} {user.family_name}</p>
+
+                {user.picture && <img src={user.picture} alt="My Avatar"/>}
+              </>
+            )}
           </div>
         </div>
       </div>

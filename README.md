@@ -113,3 +113,51 @@ Instantiating the Auth0 SPA SDK
                 - getTokenSilently(): Grab the token so we can use it for API calls.
                 - getIdTokenClaims(): Get the information out of our token.
                 - logout(): Call the logout and get redirected to Auth0 Logout
+
+            Once our login is set up, and the user is able to log in with their preferred method, we need to handle the authentication.
+
+            Auth0 will redirect a user back to our application and we can handle that in our Auth0Provider code.
+
+            Notice there is a "code" in the url after logging in, we will need to take this and use it to authenticate our user.
+            We'll arrange our Auth0 context so that it can check for the string "code=" in the URL. Lets replace our original
+            initializeAuth0 method.
+
+            After this, create the handleRedirectCallback method.
+
+            We are checking for "code=" in the URL. If that does exist, then we are going to go straight to the handleRedirectCallback() method. 
+            This will call Auth0's handleRedirectCallback() method and then go grab the user's info. We will setState and React will pass all this info down to our app.
+            
+            At the bottom of this method, we need to update the URL to remove the "code=". Tyhis code can only be used once, so we need to remove it from the URL to prevent
+            handleRedirectCallback() from running again in the case that the user refreshes the page. We'll use the window.history.replace() to remove the code. 
+
+            We will then update the handleRedirectCallback and include "window.history.replaceState() after setting the state"
+
+            Restart the server with npm start. Once up and running again, we can click login, log in on the Universal login page, and get redirected back to our app. 
+            Nothing will have changed in the UI, but in React Dev Tools, we can see that we have a user in our app.
+
+            Next, lets grab the user out of the Auth0 Context and display it in our app. We'll uypdate App.js to show or hide the login button.
+
+            Showing the login button if there is no user...
+
+            We are pulling isLoading and the user directly out of the Auth0 Context. We could use isAuthenticated also.
+
+            We are using React Fragments to wrap our code here since React always wants one parent element. The <> </> syntax is a React Fragment short syntax introduced recently.
+
+            Showing the user information if they are logged in...
+
+            Lets write some code to show the user's name and avatar if the app is not loading and there is a user.
+
+            By using object destructuring, lets get our user's info to show on the screen.
+
+            Now when we are logged in we will see our user's info. We are showing their avatar using user.picture.
+
+            Our app has authentication functioning now. We have been able to:
+                - Show a login button
+                - Log a user in with social auth.
+                - Display the user's info.
+
+            Logout For Our React App...
+
+            We have users logged in. We'll give them a way to logout now. We already have the functionality to log a user out thanks to the logout() method.
+
+            We also have already passed it to our application through React Context. Within the configObject, we are going to add a couple of things.
